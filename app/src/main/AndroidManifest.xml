@@ -16,32 +16,32 @@
         android:theme="@style/Theme.OUJDASHOP"
         tools:targetApi="31">
         <activity
-            android:name=".QrScannerActivity"
+            android:name=".Activities.QrScannerActivity"
             android:exported="false" />
         <activity
-            android:name=".CategoryAdapter"
+            android:name=".Adapters.CategoryAdapter"
             android:exported="false"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".UserActivity"
+            android:name=".Activities.UserActivity"
             android:exported="false"
             android:theme="@style/ActionBar" />
         <activity
-            android:name=".DetailsActivity"
+            android:name=".Activities.DetailsActivity"
             android:exported="false"
             android:theme="@style/ActionBar" />
         <activity
-            android:name=".ProductActivity"
+            android:name=".Activities.ProductActivity"
             android:exported="false"
             android:theme="@style/ActionBar" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".Activities.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:exported="true"
             android:theme="@style/ActionBar" />
     </application>

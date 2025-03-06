@@ -1,4 +1,4 @@
-package com.example.oujdashop;
+package com.example.oujdashop.Activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;

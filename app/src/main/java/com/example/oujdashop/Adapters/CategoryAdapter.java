@@ -1,4 +1,4 @@
-package com.example.oujdashop;
+package com.example.oujdashop.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.oujdashop.Models.Category;
+import com.example.oujdashop.R;
 
 import java.util.ArrayList;
 

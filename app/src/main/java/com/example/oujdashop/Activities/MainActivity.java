@@ -1,4 +1,4 @@
-package com.example.oujdashop;
+package com.example.oujdashop.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +12,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.oujdashop.Adapters.CategoryAdapter;
+import com.example.oujdashop.Database.Database;
 import com.example.oujdashop.Models.Category;
+import com.example.oujdashop.R;
+
 import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 

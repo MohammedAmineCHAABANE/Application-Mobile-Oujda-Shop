@@ -1,12 +1,15 @@
-package com.example.oujdashop;
+package com.example.oujdashop.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +20,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.oujdashop.Database.Database;
 import com.example.oujdashop.Models.User;
+import com.example.oujdashop.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -70,6 +78,11 @@ public class UserActivity extends AppCompatActivity {
             etUserEmail.setText(cursor.getString(2));
         }
         cursor.close();
+        String photoBase64 = dbHelper.getUserPhoto(userId);
+        if (photoBase64 != null) {
+            ivProfilePicture.setImageBitmap(getBitmap(photoBase64));
+        }
+
     }
 
     private void saveUserInfo() {
@@ -96,12 +109,39 @@ public class UserActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                ivProfilePicture.setImageBitmap(bitmap);
+                if(bitmap != null){
+                    String photoBase64 = save(bitmap);
+                    if(dbHelper.updateUserPhoto(userId,photoBase64)){
+                        Toast.makeText(this, "Photo de profil mise à jour avec succès", Toast.LENGTH_SHORT).show();
+                        ivProfilePicture.setImageBitmap(bitmap);
+                    }else{
+                        Toast.makeText(this, "Erreur lors de la mise à jour de la photo de profil", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    public Bitmap getBitmap(String path) {
+        return BitmapFactory.decodeFile(path);
+    }
+
+    public String save(Bitmap bitmap) {
+        File directory = getApplicationContext().getFilesDir();
+        File file = new File(directory, new Date().toString() + ".jpg");
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            return file.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private void showChangePasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Changer le mot de passe");
@@ -155,27 +195,5 @@ public class UserActivity extends AppCompatActivity {
         builder.setNegativeButton("Annuler", null);
         builder.show();
     }
-    private void logoutUser() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Déconnexion");
-        builder.setMessage("Voulez-vous vraiment vous déconnecter ?");
-
-        builder.setPositiveButton("Oui", (dialog, which) -> {
-            SharedPreferences.Editor editor = getSharedPreferences("UserPrefs", MODE_PRIVATE).edit();
-            editor.clear();
-            editor.apply();
-
-            Intent intent = new Intent(UserActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
-
-        builder.setNegativeButton("Non", null);
-        builder.show();
-    }
-
-
-
 
 }

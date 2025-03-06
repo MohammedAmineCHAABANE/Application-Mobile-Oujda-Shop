@@ -1,4 +1,4 @@
-package com.example.oujdashop;
+package com.example.oujdashop.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,7 +8,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.oujdashop.Database.Database;
 import com.example.oujdashop.Models.User;
+import com.example.oujdashop.R;
 
 public class LoginActivity extends AppCompatActivity {
 

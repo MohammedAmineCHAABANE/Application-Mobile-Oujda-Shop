@@ -1,6 +1,8 @@
-package com.example.oujdashop;
+package com.example.oujdashop.Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.oujdashop.Models.Product;
+import com.example.oujdashop.R;
 
 import java.util.ArrayList;
 
@@ -58,9 +61,17 @@ public class ProductAdapter extends BaseAdapter {
         // Afficher les informations du produit
         holder.tvProductName.setText(product.getName());
         holder.tvProductPrice.setText(String.format("%.2f DH", product.getPrice()));
-        holder.ivProductImage.setImageResource(R.mipmap.logo_app); // Placeholder image
+        if(product.getImage()!=null){
+            holder.ivProductImage.setImageBitmap(getBitmap(product.getImage()));
+        }else {
+            holder.ivProductImage.setImageResource(R.mipmap.logo_app);
+        }
 
         return convertView;
+    }
+
+    public Bitmap getBitmap(String path) {
+        return BitmapFactory.decodeFile(path);
     }
 
     static class ViewHolder {

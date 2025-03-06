@@ -1,4 +1,4 @@
-package com.example.oujdashop;
+package com.example.oujdashop.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -48,6 +48,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String COLUMN_PROD_NAME = "name";
     private static final String COLUMN_PROD_PRICE = "price";
     private static final String COLUMN_PROD_DESC = "description";
+    private static final String COLUMN_PROD_IMG = "image";
     private static final String COLUMN_PROD_CATEGORY_ID = "category_id";
 
     private static final String CREATE_PRODUCTS_TABLE =
@@ -56,6 +57,7 @@ public class Database extends SQLiteOpenHelper {
                     COLUMN_PROD_NAME + " TEXT, " +
                     COLUMN_PROD_PRICE + " REAL, " +
                     COLUMN_PROD_DESC + " TEXT, " +
+                    COLUMN_PROD_IMG + " TEXT, " +
                     COLUMN_PROD_CATEGORY_ID + " INTEGER , " +
                     "FOREIGN KEY(" + COLUMN_PROD_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + COLUMN_CAT_ID + "))";
 
@@ -92,6 +94,7 @@ public class Database extends SQLiteOpenHelper {
         values.put(COLUMN_PRENOM, prenom);
         values.put(COLUMN_EMAIL, email);
         values.put(COLUMN_PASSWORD, password);
+
 
         long result = db.insert(TABLE_USERS, null, values);
         db.close();
@@ -168,7 +171,7 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_PROD_ID + "=?", new String[]{String.valueOf(Id)});
         while (cursor.moveToNext()) {
-            product = new Product(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2), cursor.getString(3), null);
+            product = new Product(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2), cursor.getString(3),cursor.getString(4), null);
         }
         cursor.close();
         db.close();
@@ -180,7 +183,7 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_PROD_CATEGORY_ID + "=?", new String[]{String.valueOf(category.getId())});
         while (cursor.moveToNext()) {
-            products.add(new Product(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2), cursor.getString(3), category));
+            products.add(new Product(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2), cursor.getString(3),cursor.getString(4), category));
         }
         cursor.close();
         db.close();
@@ -260,6 +263,27 @@ public class Database extends SQLiteOpenHelper {
         return photoBase64;
     }
 
+    public String getProductPhoto(int Id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT image FROM products WHERE id = ?", new String[]{String.valueOf(Id)});
+
+        String photoBase64 = null;
+        if (cursor.moveToFirst()) {
+            photoBase64 = cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
+        return photoBase64;
+    }
+    public boolean updateProductPhoto(int Id, String photoBase64) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PROD_IMG, photoBase64);
+
+        int rows = db.update("products", values, "id = ?", new String[]{String.valueOf(Id)});
+        db.close();
+        return rows > 0;
+    }
 
 }
 
